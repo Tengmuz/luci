@@ -189,6 +189,7 @@ $(eval $(call application,vnstat,LuCI Support for VnStat,vnstat vnstati))
 $(eval $(call application,radvd,LuCI Support for Radvd,radvd))
 $(eval $(call application,ahcp,LuCI Support for AHCPd,ahcpd))
 $(eval $(call application,wshaper,LuCI Support for wshaper,wshaper))
+$(eval $(call application,fireinstall,LuCI Support for fpkg,fpkg))
 
 $(eval $(call application,pbx,LuCI PBX Administration,\
 	asterisk18 \

@@ -1,0 +1,35 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "FireFly App Manager"
+msgstr "FireFly软件管理"
+
+msgid "Manage the application"
+msgstr "管理第三方插件"
+
+msgid "List"
+msgstr "软件列表"
+
+msgid "Manage"
+msgstr "管理"
+
+msgid "Ok"
+msgstr "完成"
+
+msgid "Install"
+msgstr "手动安装"
+
+msgid "Upload Local Plugin"
+msgstr "上传安装包"
+
+msgid "Upload"
+msgstr "上传"
+
+msgid "Oops! No application found!"
+msgstr "没有安装任何插件！"
+
+msgid "Are you sure to remove this application"
+msgstr "确定要移除吗"
+
+msgid "Install Error"
+msgstr "安装失败"

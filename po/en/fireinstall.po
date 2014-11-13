@@ -1,0 +1,35 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "FireFly App Manager"
+msgstr "FireFly App Manager"
+
+msgid "Manage the application"
+msgstr "Manage the application"
+
+msgid "List"
+msgstr "List"
+
+msgid "Manage"
+msgstr "Manage"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Install"
+msgstr "Install"
+
+msgid "Upload Local Plugin"
+msgstr "Upload Local Plugin"
+
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Oops! No application found!"
+msgstr "Oops! No application found!"
+
+msgid "Are you sure to remove this application"
+msgstr "Are you sure to remove this application"
+
+msgid "Install Error"
+msgstr "Install Error"

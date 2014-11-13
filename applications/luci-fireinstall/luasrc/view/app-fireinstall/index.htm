@@ -1,0 +1,45 @@
+<%+header%>
+<script type="text/javascript" src="/luci-static/resources/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/luci-static/resources/fireinstall.js"></script>
+<link rel="stylesheet" href="/luci-static/resources/fireinstall.css">
+<input type="hidden" value="<%=stok%>" id="stok">
+<h2>
+        <a id="content" class="content"><%=translate("FireFly App Manager")%></a>
+        <div class="cbi-map-descr"><%=translate("Manage the application")%><%=hello%></div>
+</h2>
+<fieldset class="cbi-section" id="">
+        <div class="fire-second-title">
+                <legend class="fire-legend"><%=translate("List")%></legend>
+                <div class="fire-manage" id="fire-manage"><a><%=translate("Manage")%></a></div>
+                <div class="fire-manage" id="fire-cancel-manage"><a><%=translate("Ok")%></a></div>
+        </div>
+        <div id="fire-app-context" class="fire-app-context">
+                <!--
+                <div class="fire-app-list">
+                        <div class="fire-app-logo"></div>
+                        <div class="fire-app-title"></div>
+                        <div class="fire-app-version"></div>
+                        <div class="fire-app-author"></div>
+                </div>
+                -->
+		<div class="fire-app-loading" id="fire-app-loading">
+			<img src="/luci-static/resources/loading.gif" />
+		</div>
+		<div id="fire_app_empty" class="fire_app_empty fire-app-loading"><%=translate("Oops! No application found!")%></div>
+        </div>
+
+        <div class="fire-second-title">
+                <legend class="fire-legend"><%=translate("Install")%></legend>
+        </div>
+        <div class="fire-upload-plugin">
+                <form action="<%=REQUEST_URI%>" method="post" enctype="multipart/form-data">
+                        <span><%=translate("Upload Local Plugin")%>:</span>
+                        <input type="file" name="plugin">
+			<input type="hidden" name="upload" value="upload">
+                        <input type="submit" value='<%=translate("Upload")%>' class="cbi-button">
+                </form>
+        </div>
+	<!-- Alert -->
+	<div class="fire-delete-alert" id="fire-delete-alert"><%=translate("Are you sure to remove this application")%>?</div>
+</fieldset>
+<%+footer%>
