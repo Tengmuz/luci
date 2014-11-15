@@ -525,10 +525,10 @@ input[type=file] {
 	padding: initial;
 	border: initial;
 	line-height: initial;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
 	width: auto !important;
+	filter: alpha(opacity = 0);  
+    -moz-opacity:0;  
+    opacity: 0;  
 }
 
 input[type=button], input[type=reset], input[type=submit] {
@@ -1448,6 +1448,13 @@ footer {
 	background-image: url('../resources/cbi/download.gif');
 }
 
+.cbi-button-file,
+.cbi-input-file {
+	background-position: 12px center, left top;
+	padding-left: 48px;
+	background-image: url('../resources/cbi/file.gif');
+}
+
 .btn.active, .btn:active {
 	-webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
 	-moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -2121,7 +2128,7 @@ em a {
 
 .firefly-login-form{
     width:470px;
-    height:350px;
+    height:auto;
     line-height:458px;
     float:left;
 }
@@ -2136,4 +2143,30 @@ em a {
     height:350px;
     float:left;
     background: url(/luci-static/resources/img/login_pic.png) no-repeat left 0;
+}
+
+#cbi-rc-1-rcs{
+    display:block;
+}
+
+#cbi-crontab-1-crons{
+    display:block;
+}
+
+.input_file_context{
+    padding:0px;
+    top:0px;
+    position: relative;
+}
+
+.input_file_real{
+    position:absolute;
+    top:0px;
+}
+
+.input_file_fake{
+    /*position:absolute;*/
+    top:0px;
+    left:0px;
+    margin:0px;
 }
