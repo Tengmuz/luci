@@ -20,6 +20,8 @@
 
 	local c = tree
 	local i, r
+	
+	
 
 	-- tag all nodes leading to this page
 	for i, r in ipairs(request) do
@@ -82,12 +84,18 @@
 			end
 		end
 	end
+	
+	
 -%>
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
  <head>
   <meta charset="utf-8">
   <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+  <%
+    local title = striptags( ( (node and node.title) and translate(node.title) or ''))
+  %>
+  <div style="display:none"><%=title%></div>
   <!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
   <meta name="viewport" content="initial-scale=1.0">
   <link rel="stylesheet" href="<%=media%>/cascade.css">
@@ -100,20 +108,16 @@
   </style>
   <% end -%>
   <script src="<%=resource%>/xhr.js"></script>
+  <script type="text/javascript" src="/luci-static/resources/jquery-1.7.1.js"></script>
+  <script src="<%=media%>/firefly.js"></script>
  </head>
 
  <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
   <header>
-   <div class="logo-header">
-    <div class="logo-header-container">
-        <div class="logo-img">
-            <img src="<%=media%>/img/logo.png" />
-        </div>
-    </div>
-   </div>
-   <div class="fill">
+   
+   <div id="header-menu" class="fill nav-header">
     <div class="container">
-     <a class="brand" href="#"><%=hostname%></a>
+     <a class="brand" href="#"><img class="logo-img" src="<%=media%>/img/logo.png" /></a>
      <ul class="nav">
 	 <%-
 		local function submenu(prefix, node)
@@ -124,8 +128,12 @@
 			<%-
 				for i, r in ipairs(childs) do
 					local nnode = node.nodes[r]
+					local li_class=""
 					local href  = controller .. prefix .. r ..
 						(nnode.query and http.build_querystring(nnode.query) or "")
+					--[[if title == translate(nnode.title) then
+					    li_class = "test"
+					end ]]
 			%>
 	  <li><a href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a></li>
 			<%-
@@ -144,16 +152,24 @@
 				local href  = controller .. "/" .. category .. "/" .. r ..
 					(nnode.query and http.build_querystring(k.query) or "")
                 local grandchildren = disp.node_childs(nnode)
-                
+                local is_chile_node = ""
+       
                 if #grandchildren > 0 then
+                    is_chile_node = ""
+                    for x, y in ipairs(grandchildren) do
+                        local xnode = nnode.nodes[y]
+                        if title == translate(xnode.title) then
+                            is_chile_node = "light_bulb"
+                        end
+                    end
 	%>
         <li class="dropdown">
-            <a class="menu" href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
+            <a class="menu menu-width <%=is_chile_node%>" href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
             <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
         </li>
 	<%          else %>
          <li>
-	        <a href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
+	        <a class="menu-width <%=is_chile_node%>" href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
         </li> 
     <%
                 end
@@ -175,7 +191,7 @@
 				end
 			end
 	%>
-	<div class="pull-right">
+	<div class="pull-right firefly_setting" id="firefly_setting">
 	<% if ucichanges > 0 then %>
 	  <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
 	<% end %>
