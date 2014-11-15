@@ -1,0 +1,17 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "Home Page"
+msgstr "Home Page"
+
+msgid "Wiki"
+msgstr "Wiki"
+
+msgid "Community"
+msgstr "Community"
+
+msgid "Contact Us"
+msgstr "Contact Us"
+
+
+
