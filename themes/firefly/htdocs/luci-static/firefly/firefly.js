@@ -10,6 +10,8 @@ $(document).ready(function(){
  
     //some button define with:100px ， after we changed the theme , the text cannot display fully
     //let the text display full
-    $(".cbi-button").attr("style","");
+    $(".cbi-button").attr("style","");  
+    $(".firefly-iface-table-adjust").attr("style","width:550px");
+    $(".firefly-wifi-table-adjust").attr("style","width:440px;text-align:right;");
 });
 
