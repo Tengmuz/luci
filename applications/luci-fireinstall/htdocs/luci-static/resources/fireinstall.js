@@ -78,13 +78,36 @@ function bind_item_click_event(){
 	});
 }
 
+
+function load_app_install_path_record()
+{
+    $.getJSON("/cgi-bin/luci/;stok="+$("#stok").val()+"/firefly-api/get_app_install_position",
+		function(data){
+			if(data.error == 0)
+			{
+			}
+			else if(data.error == 1)
+			{
+			}
+		}
+	);
+}
+
 $(document).ready(function(){
+
+    /*选择安装路径*/
+    //$("#install_path_select")
+    load_app_install_path_record()
 
 	
 	/*管理APP按钮，点击进入管理状态*/
 	$("#fire-manage").click(function(){
 		//隐藏管理按钮
 		$(this).hide();
+		//隐藏安装路径span
+		$("#install_path_span").hide();
+		//显示选择安装路径select
+		$("#install_path_select").show();
 		//显示完成按钮
 		$("#fire-cancel-manage").show();
 		//更改标记
@@ -97,6 +120,10 @@ $(document).ready(function(){
 	$("#fire-cancel-manage").click(function(){
 		/*隐藏完成按钮*/
 		$(this).hide();
+		//显示安装路径span
+		$("#install_path_span").show();
+		//隐藏选择安装路径select
+		$("#install_path_select").hide();
 		/*显示管理按钮*/
 		$("#fire-manage").show();
 		//更改标记

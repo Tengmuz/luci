@@ -9,9 +9,11 @@
 </h2>
 <fieldset class="cbi-section" id="">
         <div class="fire-second-title">
-                <legend class="fire-legend"><%=translate("List")%></legend>
-                <div class="fire-manage" id="fire-manage"><a><%=translate("Manage")%></a></div>
-                <div class="fire-manage" id="fire-cancel-manage"><a><%=translate("Ok")%></a></div>
+                <span id="install_path_span" class="firefly_mt25 cbi-button">Internal storage</span>
+                <select id="install_path_select" class="firefly_mt25 cbi-button hidden"><option>Internal storage</option></select>
+                <span class="firefly_fz19">(Chose App Install Location)</span>
+                <div class="fire-manage" id="fire-manage"><button class="cbi-button"><%=translate("Manage")%></button></div>
+                <div class="fire-manage" id="fire-cancel-manage"><button class="cbi-button"><%=translate("Ok")%></button></div>
         </div>
         <div id="fire-app-context" class="fire-app-context">
                 <!--
