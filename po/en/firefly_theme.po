@@ -14,4 +14,8 @@ msgid "Contact Us"
 msgstr "Contact Us"
 
 
+msgid "You do not have permission to do that. Please login again!"
+msgstr "You do not have permission to do that. Please login again!"
 
+msgid "Not found this device. Please plugging the device into a different port!"
+msgstr "Not found this device. Please plugging the device into a different port!"

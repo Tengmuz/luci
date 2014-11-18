@@ -2,10 +2,9 @@
 /*标记是否在管理APP的状态*/
 var is_manage=false;
 
-function load_application_list()
+function load_application_list(path)
 {
-	//模板
-	/*   
+	/*   //模板
 	<div class="fire-app-list" id="xxx">    
 		         
 		<div class="fire-app-logo"><img src="" /></div> 
@@ -15,9 +14,11 @@ function load_application_list()
 		<div class="fire-app-author"></div>
 	</div>
 	*/
-	$.getJSON("/cgi-bin/luci/;stok="+$("#stok").val()+"/firefly-api/all_package",
+    show_loading_icon()
+	$.getJSON("/cgi-bin/luci/;stok="+$("#stok").val()+"/firefly-api/all_package?path="+path,
 		function(data){
 			hide_loading_icon()
+            $("#fire-app-context")
 			if(data.error == 0)
 			{
  				$.each(data.list, function(){   
@@ -34,6 +35,16 @@ function load_application_list()
 			}
 		}
 	);
+}
+
+function show_loading_icon()
+{
+    var empty_tag = $("#fire_app_empty").html()
+    $("#fire-app-context").html("");
+    var loading='<div class="fire-app-loading" id="fire-app-loading" style="display: none;"><img src="/luci-static/resources/loading.gif"></div>'
+    var empty='<div id="fire_app_empty" class="fire_app_empty fire-app-loading">'+empty_tag+'</div>'
+    $("#fire-app-context").append(loading)
+    $("#fire-app-context").append(empty)
 }
 
 function hide_loading_icon()
@@ -78,19 +89,46 @@ function bind_item_click_event(){
 	});
 }
 
+function set_app_insstall_path_record(name)
+{
+    $.post("/cgi-bin/luci/;stok="+$("#stok").val()+"/firefly-api/set_app_install_position?name="+name, {"name":name},
+    function(data){
+    if(data.error == 0)
+	{
+        /*刷新APP列表*/
+	    load_application_list(name)
+    }
+    else if(data.error == 403)
+        alert($("#error403").html())
+    else if(data.error == 100)
+        alert($("#error100").html())
+    else
+        alert(data.error);
+    }, "json");
+}
 
 function load_app_install_path_record()
 {
     $.getJSON("/cgi-bin/luci/;stok="+$("#stok").val()+"/firefly-api/get_app_install_position",
 		function(data){
-			if(data.error == 0)
-			{
-			}
-			else if(data.error == 1)
-			{
-			}
+			var default_path=data.list.path.name
+			$("#install_path_span").html(default_path) 
+            /*刷新APP列表*/
+	        load_application_list(default_path)              
+            $.each(data.list.data, function(){
+                //$("#install_path_select").append('<option>'+this.name+'</option>');     
+				if(this.name == default_path)
+					$("#install_path_select").append('<option selected=selected>'+this.name+'</option>');
+				else
+					$("#install_path_select").append('<option>'+this.name+'</option>');     
+            });
+			$("#install_path_select").unbind("change").change( function() {
+				$("#install_path_span").html($(this).val())
+			});
 		}
 	);
+
+
 }
 
 $(document).ready(function(){
@@ -130,10 +168,11 @@ $(document).ready(function(){
 		is_manage=false
 		//更改样式
 		$(".fire-app-delete-icon").hide();
+		//save app install path
+		set_app_insstall_path_record($("#install_path_span").html())
 	});
 	
-	/*刷新APP列表*/
-	load_application_list()
+	
 	
 	/*如果有错误信息的话，显示错误信息*/
 	if($("#app_install_error").html())

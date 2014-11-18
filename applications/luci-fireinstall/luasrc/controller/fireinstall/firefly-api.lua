@@ -2,7 +2,7 @@ module("luci.controller.fireinstall.firefly-api", package.seeall)
 
 function index()
     local function authenticator(validator, accs)
-        local auth = luci.http.formvalue("auth", true)
+    local auth = luci.http.formvalue("auth", true)
 	local rv={} 
         if auth then 
             local sdat = luci.sauth.read(auth)
@@ -29,38 +29,45 @@ function index()
     entry({"firefly-api", "delete_package"}, call("delete_package"))
     --get the app install position
     entry({"firefly-api", "get_app_install_position"}, call("get_app_install_position"))
-
+    --set the app install position
+    entry({"firefly-api", "set_app_install_position"}, call("set_app_install_position"))
 end
 
 --read all plugin 
 function read_install_package_list()
         local uci = luci.model.uci.cursor()
-	local fs  = require "luci.fs"
+	    local fs  = require "luci.fs"
         local rv={}
         local list={}
         local i=0
+        local path = luci.http.formvalue("path")
+        if not path then
+            path = "Internal storage"
+        end
 	
         rv["error"]=1
         uci:foreach("fpkg", "globals",
             function(section)
-                local index = ""
-                --xcloud
-                if section.plugin_Type == "xcloud" then
-                    if fs.isfile(section.plugin_IntallPath.."/html/index.htm") then
-                        index="/cgi-bin/luci/xcloud/comskip?page="..section.plugin_IntallPath.."/html/index.htm"
-				    end
-			    end
-                rv["error"]=0
-                list[section[".name"]]={
-				    plugin=section[".name"],
-				    src=index,
-                    plugin_Name=section.plugin_Name,
-                    plugin_VersionName=section.plugin_VersionName,
-                    plugin_Largeicon=section.plugin_Largeicon,
-                    plugin_Smallicon=section.plugin_Smallicon,
-                    plugin_Type=section.plugin_Type,
-                }
-                i=i+1
+                if section.plugin_Position == path then
+                    local index = ""
+                    --xcloud
+                    if section.plugin_Type == "xcloud" then
+                        if fs.isfile(section.plugin_IntallPath.."/html/index.htm") then
+                            index="/cgi-bin/luci/xcloud/comskip?page="..section.plugin_IntallPath.."/html/index.htm"
+		                end
+		            end
+                    rv["error"]=0
+                    list[section[".name"]]={
+		                plugin=section[".name"],
+		                src=index,
+                        plugin_Name=section.plugin_Name,
+                        plugin_VersionName=section.plugin_VersionName,
+                        plugin_Largeicon=section.plugin_Largeicon,
+                        plugin_Smallicon=section.plugin_Smallicon,
+                        plugin_Type=section.plugin_Type,
+                    }
+                    i=i+1
+                end
             end
         )
         rv["list"]=list
@@ -112,13 +119,14 @@ function get_app_install_position()
     local path_name = uci:get("fpkg", "install_path", "name")
     local path = uci:get("fpkg", "install_path", "path")     
     local rv={}                                              
-    local list={}                                            
+    local list={}    
+    local list_empty={}                                         
     rv["error"]=1                                                         
     list["path"]={                                           
         name=path_name,                                      
         path=path,                                           
     }         
-    local list_empty["path"]={                                           
+    list_empty["path"]={                                           
         name="Internal Storage",                                      
         path="",                                           
     }                                               
@@ -136,15 +144,14 @@ function get_app_install_position()
             path=tmp[1],                                                    
         }    
         --用户设置的路径存在
-        if tmp[1] == path then
-            if tmp[2] == path_name then
-                rv["error"]=0
-            end
-		end                                                       
+        if string.sub(tmp[2], 2, #tmp[2]) == path_name then
+        	rv["error"]=0
+   	end                                                       
     end                                                                         
     pp:close()                                           
-    list["date"]=data     
-    
+    list["data"]=data     
+    list_empty["data"]=data 
+
     --if mount point not exit , use default storage
     if rv["error"] == 0 then                              
         rv["list"]=list         
@@ -156,5 +163,50 @@ function get_app_install_position()
     luci.http.write_json(rv)                             
 end
 
+-- get udisk direction
+function get_udisk_direction(name)
+    local pp   = io.open("/tmp/usbmounted", "r") 
+    local line = ""
+    local path = nil
+    if name then
+        while true do                                                             
+            line = pp:read()                                                      
+            if (line == nil) then break end                                       
+            local tmp = lua_string_split(line,"//")                                                                     
+            if string.sub(tmp[2], 2, #tmp[2]) == name then                 
+                path=tmp[1]
+            end
+        end 
+    end
+    return path
+end
 
+--set app_install_position
+function set_app_install_position()
+    local name = luci.http.formvalue("name")
+    local path = get_udisk_direction(name)
+    local rv={}  
+    rv["error"]=1
+    if name then 
+	    rv["error"]=luci.sys.call("uci set fpkg.install_path.name='"..name.."'")
+	    luci.sys.call("uci commit")
+	else
+	    rv["error"]=2
+    end
+
+    -- set install path success , mount the /opt direction to new path
+    if rv["error"] == 0 then
+        luci.sys.call("umount /opt")
+        if name ~= "Internal storage" then
+            if path then
+                rv["error"]=luci.sys.call("mount /mnt/"..path.." /opt && cp /rom/opt/app /opt -rf")
+            else
+                rv["error"]=100
+            end
+        end
+    end
+
+    luci.http.prepare_content("application/json")        
+    luci.http.write_json(rv)  
+end
 

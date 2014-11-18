@@ -13,4 +13,8 @@ msgstr "社区"
 msgid "Contact Us"
 msgstr "联系我们"
 
+msgid "You do not have permission to do that. Please login again!"
+msgstr "您没有权限访问，请重新登录!"
 
+msgid "Not found this device. Please plugging the device into a different port!"
+msgstr "找不到该设备，请检查设备是否插入。"
