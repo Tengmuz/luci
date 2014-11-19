@@ -91,7 +91,7 @@ function bind_item_click_event(){
 
 function set_app_insstall_path_record(name)
 {
-    $.post("/cgi-bin/luci/;stok="+$("#stok").val()+"/firefly-api/set_app_install_position?name="+name, {"name":name},
+    $.post("/cgi-bin/luci/;stok="+$("#stok").val()+"/firefly-api/set_app_install_position", {"name":name},
     function(data){
     if(data.error == 0)
 	{
