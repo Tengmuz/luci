@@ -84,7 +84,11 @@ function bind_item_click_event(){
 			//cgi-bin/luci/admin/xcloud/comskip?page=
 			var src=$(this).attr("src");
 			if (src != "")
-				window.location.href=src
+            {
+				//window.location.href=src
+                $("#firefly_app_view_iframe").attr("src",src);
+                $("#firefly_app_view").fadeIn("slow");
+            }
 		}
 	});
 }
@@ -124,6 +128,8 @@ function load_app_install_path_record()
             });
 			$("#install_path_select").unbind("change").change( function() {
 				$("#install_path_span").html($(this).val())
+                //save app install path
+		        set_app_insstall_path_record($(this).val())
 			});
 		}
 	);
@@ -134,7 +140,6 @@ function load_app_install_path_record()
 $(document).ready(function(){
 
     /*选择安装路径*/
-    //$("#install_path_select")
     load_app_install_path_record()
 
 	
@@ -142,10 +147,10 @@ $(document).ready(function(){
 	$("#fire-manage").click(function(){
 		//隐藏管理按钮
 		$(this).hide();
-		//隐藏安装路径span
-		$("#install_path_span").hide();
-		//显示选择安装路径select
-		$("#install_path_select").show();
+		//显示安装路径span
+		$("#install_path_span").removeClass("hidden");
+		//隐藏选择安装路径select
+		$("#install_path_select").addClass("hidden");
 		//显示完成按钮
 		$("#fire-cancel-manage").show();
 		//更改标记
@@ -158,18 +163,17 @@ $(document).ready(function(){
 	$("#fire-cancel-manage").click(function(){
 		/*隐藏完成按钮*/
 		$(this).hide();
-		//显示安装路径span
-		$("#install_path_span").show();
-		//隐藏选择安装路径select
-		$("#install_path_select").hide();
+        //隐藏安装路径span
+		$("#install_path_span").addClass("hidden");
+		//显示选择安装路径select
+		$("#install_path_select").removeClass("hidden");
 		/*显示管理按钮*/
 		$("#fire-manage").show();
 		//更改标记
 		is_manage=false
 		//更改样式
 		$(".fire-app-delete-icon").hide();
-		//save app install path
-		set_app_insstall_path_record($("#install_path_span").html())
+		
 	});
 	
 	
@@ -179,4 +183,9 @@ $(document).ready(function(){
 	{
 		alert($("#app_install_error").html())
 	}
-});
+
+    /*close iframe*/
+    $("#firefly_app_view_close").click(function(){
+        $("#firefly_app_view").fadeOut("slow");
+    })
+});;

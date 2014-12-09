@@ -9,9 +9,9 @@
 </h2>
 <fieldset class="cbi-section" id="">
         <div class="fire-second-title">
-                <span id="install_path_span" class="firefly_mt25 cbi-button">Internal storage</span>
-                <select id="install_path_select" class="firefly_mt25 cbi-button hidden"><option>Internal storage</option></select>
-                <span class="firefly_fz19">(Chose App Install Location)</span>
+                <span id="install_path_span" class="firefly_mt25 cbi-button hidden">Internal Storage</span>
+                <select id="install_path_select" class="firefly_mt25 cbi-button"><option>Internal Storage</option></select>
+                <!-- <span class="firefly_fz19">(Chose App Install Location)</span> -->
                 <div class="fire-manage" id="fire-manage"><button class="cbi-button"><%=translate("Manage")%></button></div>
                 <div class="fire-manage" id="fire-cancel-manage"><button class="cbi-button"><%=translate("Ok")%></button></div>
         </div>
@@ -44,4 +44,9 @@
 	<!-- Alert -->
 	<div class="fire-delete-alert" id="fire-delete-alert"><%=translate("Are you sure to remove this application")%>?</div>
 </fieldset>
+
+<div id="firefly_app_view" class="firefly_app_view hidden">
+    <div class="firefly_app_view_title"><a id="firefly_app_view_close">Close</a></div>
+    <iframe id="firefly_app_view_iframe" class="firefly_app_view_iframe" src=""></iframe>
+</div>
 <%+footer%>
